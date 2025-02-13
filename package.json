@@ -40,7 +40,7 @@
     "@safe-global/safe-core-sdk-types/**/ethers": "^6.11.1",
     "@safe-global/protocol-kit/**/ethers": "^6.11.1",
     "@safe-global/api-kit/**/ethers": "^6.11.1",
-    "@safe-global/safe-deployments": "npm:@0xsambtc/safe-deployments@1.37.2-alpha",
+    "@safe-global/safe-deployments": "npm:@rollna/safe-deployments@1.37.2-alpha",
     "@gnosis.pm/zodiac/**/ethers": "^6.11.1"
   },
   "dependencies": {
