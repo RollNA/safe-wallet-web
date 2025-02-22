@@ -160,6 +160,26 @@ const ReviewStep = ({ data, onSubmit, onBack, setStep }: StepRenderProps<NewSafe
     onBack(data)
   }
 
+  const getGasOptions = async (): Promise<DeploySafeProps['options']> => {
+    try {
+      if (isEIP1559) {
+        return {
+          maxFeePerGas: maxFeePerGas?.toString(),
+          maxPriorityFeePerGas: maxPriorityFeePerGas?.toString(),
+          gasLimit: gasLimit?.toString(),
+        }
+      }
+    } catch (err) {
+      console.warn('EIP1559 gas估算失败,使用传统gas价格', err)
+    }
+
+    // 回退到传统gas价格
+    return {
+      gasPrice: maxFeePerGas?.toString(),
+      gasLimit: gasLimit?.toString()
+    }
+  }
+
   const createSafe = async () => {
     if (!wallet || !provider || !chain) return
 
@@ -191,13 +211,7 @@ const ReviewStep = ({ data, onSubmit, onBack, setStep }: StepRenderProps<NewSafe
         return
       }
 
-      const options: DeploySafeProps['options'] = isEIP1559
-        ? {
-            maxFeePerGas: maxFeePerGas?.toString(),
-            maxPriorityFeePerGas: maxPriorityFeePerGas?.toString(),
-            gasLimit: gasLimit?.toString(),
-          }
-        : { gasPrice: maxFeePerGas?.toString(), gasLimit: gasLimit?.toString() }
+      const options = await getGasOptions()
 
       const undeployedSafe = {
         chainId: chain.chainId,
